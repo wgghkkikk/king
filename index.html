@@ -1,347 +1,581 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👑 شات الإمبراطورية الأسطوري 👑</title>
+    <title>👑 شات الإمبراطورية الأسطوري</title>
+    <!-- خطوط أسطورية من جوجل وتوهج أيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-            --panel-bg: rgba(30, 30, 46, 0.65);
+            --bg-dark: #06060c;
+            --card-dark: rgba(14, 14, 28, 0.8);
+            --neon-cyan: #00f0ff;
             --neon-gold: #ffd700;
-            --neon-blue: #00f0ff;
-            --neon-pink: #ff007f;
-            --text-main: #f1f1f6;
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-purple: #9d4edd;
+            --text-white: #ffffff;
+            --text-gray: #a0a0b8;
+            --border-glass: rgba(255, 255, 255, 0.05);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        
-        body { 
-            background: var(--bg-gradient); 
-            color: var(--text-main); 
-            display: flex; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', 'Orbitron', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(157, 78, 221, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(0, 240, 255, 0.12) 0px, transparent 50%);
+            color: var(--text-white);
+            height: 100vh;
+            display: flex;
             flex-direction: column;
-            height: 100vh; 
             overflow: hidden;
-            position: relative;
         }
 
-        /* تأثير النيون في الخلفية */
-        body::before {
-            content: ''; position: absolute; width: 300px; height: 300px; background: var(--neon-pink);
-            top: -10px; left: -50px; filter: blur(150px); opacity: 0.15; z-index: 0; pointer-events: none;
-        }
-        body::after {
-            content: ''; position: absolute; width: 300px; height: 300px; background: var(--neon-blue);
-            bottom: -50px; right: -50px; filter: blur(150px); opacity: 0.15; z-index: 0; pointer-events: none;
-        }
-
-        /* الهيدر العلوي الأسطوري */
-        .main-header {
-            background: rgba(17, 17, 28, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
-            padding: 12px 20px;
+        /* رأس الصفحة الفخم */
+        .cyber-header {
+            background: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid var(--neon-gold);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
         }
-        .main-header h1 {
-            font-size: 18px;
+
+        .cyber-logo {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-white);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cyber-logo i {
             color: var(--neon-gold);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: crownPulse 1.5s infinite alternate;
+        }
+
+        @keyframes crownPulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px var(--neon-gold)); }
+            100% { transform: scale(1.15); filter: drop-shadow(0 0 10px var(--neon-gold)); }
+        }
+
+        .status-badge {
+            font-size: 11px;
+            background: rgba(0, 240, 255, 0.07);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 30px;
+            padding: 5px 12px;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        /* الهيكل الأساسي للتقسيم */
+        .app-viewports {
+            flex: 1;
+            display: flex;
+            position: relative;
+            height: calc(100vh - 58px);
+        }
+
+        /* قائمة غرف الدردشة الجانبية */
+        .control-sidebar {
+            width: 280px;
+            background: var(--card-dark);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 90;
+        }
+
+        .sidebar-heading {
+            padding: 18px 20px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--text-gray);
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--border-glass);
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .security-badge {
-            font-size: 12px;
-            background: rgba(0, 240, 255, 0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
-        }
 
-        /* ترتيب الشاشة للموبايل والـ PC */
-        .app-container {
+        .rooms-grid {
             flex: 1;
-            display: flex;
-            position: relative;
-            z-index: 5;
-            height: calc(100vh - 55px);
-        }
-
-        /* القائمة الجانبية (الأقسام) - بتصميم مخفي ذكي للموبايل */
-        .sidebar {
-            width: 260px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(15px);
-            border-left: 1px solid var(--glass-border);
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            z-index: 9;
+            gap: 10px;
+            overflow-y: auto;
         }
-        .sidebar-header {
-            padding: 15px;
+
+        .room-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            padding: 14px 16px;
+            border-radius: 14px;
+            color: var(--text-gray);
             font-size: 15px;
-            font-weight: bold;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--glass-border);
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .rooms-list { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
-        
-        .room-btn {
-            width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
-            color: #aaa; text-align: right; font-size: 15px; cursor: pointer; border-radius: 12px;
-            transition: 0.3s; display: flex; align-items: center; gap: 10px;
+
+        .room-card i {
+            font-size: 16px;
+            color: var(--text-gray);
+            transition: color 0.25s;
         }
-        .room-btn:hover {
-            background: rgba(0, 240, 255, 0.08); color: #fff; border-color: rgba(0, 240, 255, 0.4);
+
+        .room-card:hover {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.3);
+            color: var(--text-white);
         }
-        .room-btn.active {
-            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.02) 100%);
-            border-color: var(--neon-gold); color: #fff; font-weight: bold;
+
+        .room-card:hover i {
+            color: var(--neon-cyan);
+        }
+
+        .room-card.selected {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.01) 100%);
+            border-color: var(--neon-gold);
+            color: var(--text-white);
+            font-weight: 700;
             box-shadow: inset 4px 0 0 var(--neon-gold);
         }
 
-        /* منطقة البث المباشر - بتصميم سينمائي متجاوب */
-        .stream-panel {
-            width: 320px;
-            background: var(--panel-bg);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid var(--glass-border);
+        .room-card.selected i {
+            color: var(--neon-gold);
+        }
+
+        /* قسم البث المباشر الجانبي (المتجاوب) */
+        .live-monitor {
+            width: 340px;
+            background: var(--card-dark);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-glass);
             display: flex;
             flex-direction: column;
-            transition: all 0.4s ease;
-        }
-        .stream-header {
-            padding: 15px; font-size: 14px; text-align: center; font-weight: bold; color: var(--neon-pink);
-            text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); display: flex; align-items: center; justify-content: center; gap: 6px;
-        }
-        .video-container {
-            width: 90%; margin: 0 auto 15px auto; aspect-ratio: 16/9; background: #000;
-            border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-        }
-        .video-container iframe { width: 100%; height: 100%; border: none; }
-
-        /* منطقة الشات الأساسية الوسطية */
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: transparent; }
-        .chat-messages {
-            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
-            scroll-behavior: smooth;
-        }
-        
-        /* شكل وتأثير رسائل الشات الاحترافي */
-        .message {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--glass-border);
-            padding: 12px 16px; border-radius: 16px; max-width: 85%; width: fit-content;
-            backdrop-filter: blur(5px); animation: fadeIn 0.3s ease-out forwards;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .msg-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; margin-bottom: 6px; flex-wrap: wrap; }
-        .username { font-weight: bold; color: var(--neon-blue); }
-        
-        /* رتبة إمبراطورية متحركة ومضيئة */
-        .rank-imperial {
-            color: var(--neon-gold); font-weight: bold; font-size: 11px;
-            background: rgba(255, 215, 0, 0.12); padding: 2px 8px; border-radius: 6px;
-            border: 1px solid var(--neon-gold); box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-            animation: pulseGlow 2s infinite alternate;
-        }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 4px rgba(255, 215, 0, 0.2); } 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.5); } }
-
-        .rank-bot {
-            color: #fff; background: linear-gradient(45deg, var(--neon-pink), #b000ff);
-            padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: bold;
-        }
-        .msg-text { font-size: 14px; line-height: 1.5; color: #e1e1e8; word-break: break-word; }
-
-        /* منطقة إدخال النص الأسطورية السفلى */
-        .chat-input-area {
-            padding: 15px 20px; background: rgba(15, 15, 26, 0.8);
-            backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border);
-            display: flex; gap: 12px; align-items: center; z-index: 8;
-        }
-        .chat-input {
-            flex: 1; padding: 14px 20px; background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; color: #fff;
-            font-size: 15px; outline: none; transition: 0.3s;
-        }
-        .chat-input:focus {
-            border-color: var(--neon-blue); background: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-        }
-        .send-btn {
-            padding: 14px 28px; background: linear-gradient(135deg, var(--neon-gold) 0%, #cc9900 100%);
-            border: none; border-radius: 14px; color: #000; font-weight: bold; font-size: 15px;
-            cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-        .send-btn:hover {
-            transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 90;
         }
 
-        /* بار التحكم السفلي لنسخة الموبايل للتبديل السريع */
-        .mobile-nav {
-            display: none; background: #11111c; border-top: 1px solid var(--glass-border);
-            padding: 8px 0; justify-content: space-around; z-index: 10;
+        .monitor-heading {
+            padding: 18px 20px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--neon-purple);
+            text-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .nav-tab {
-            background: none; border: none; color: #777; font-size: 12px; cursor: pointer;
-            display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s;
-        }
-        .nav-tab.active { color: var(--neon-blue); font-weight: bold; }
 
-        /* شاشات الموبايل والأجهزة الذكية - رسبونسيف ثوري */
+        .screen-container {
+            width: 90%;
+            margin: 20px auto;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .screen-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* واجهة الدردشة الوسطى */
+        .chat-portal {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            position: relative;
+        }
+
+        .chat-stream {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* رسائل الدردشة الأنيقة */
+        .bubble {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            padding: 12px 18px;
+            border-radius: 20px;
+            max-width: 80%;
+            width: fit-content;
+            backdrop-filter: blur(8px);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bubble-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .bubble-author {
+            font-weight: 700;
+            color: var(--neon-cyan);
+        }
+
+        /* رتبة إمبراطورية مشعة للمالك */
+        .rank-gold {
+            color: var(--neon-gold);
+            font-weight: 900;
+            font-size: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 3px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--neon-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
+            animation: goldGlow 2s infinite alternate;
+        }
+
+        @keyframes goldGlow {
+            0% { box-shadow: 0 0 4px rgba(255, 215, 0, 0.1); }
+            100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.4); }
+        }
+
+        .rank-system-bot {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 10px;
+            background: linear-gradient(135deg, var(--neon-purple), #7b2cbf);
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
+        .bubble-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d1d1e0;
+            word-break: break-word;
+        }
+
+        /* صندوق إدخال الرسائل السفلي */
+        .chat-anchor-bar {
+            padding: 15px 20px;
+            background: rgba(8, 8, 16, 0.9);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            z-index: 80;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: var(--text-white);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .chat-input-field:focus {
+            border-color: var(--neon-cyan);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+        }
+
+        .trigger-send-btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--neon-gold) 0%, #d4af37 100%);
+            border: none;
+            border-radius: 16px;
+            color: #000000;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.25);
+        }
+
+        .trigger-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.45);
+        }
+
+        /* لوحة التحكم والتبديل السريع للموبايل */
+        .console-nav-bar {
+            display: none;
+            background: #080810;
+            border-top: 1px solid var(--border-glass);
+            padding: 10px 0;
+            z-index: 110;
+        }
+
+        .console-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            transition: color 0.3s;
+        }
+
+        .console-btn i {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .console-btn.active {
+            color: var(--neon-cyan);
+        }
+
+        .console-btn.active i {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 5px var(--neon-cyan));
+        }
+
+        /* تهيئة شاشات الموبايل الذكية لمنع الحشر والكبس */
         @media (max-width: 768px) {
-            .sidebar {
-                position: absolute; right: -100%; top: 0; bottom: 0; width: 240px;
+            .control-sidebar {
+                position: absolute;
+                right: -100%;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                border-left: none;
             }
-            .stream-panel {
-                position: absolute; left: -100%; top: 0; bottom: 0; width: 100%;
+
+            .live-monitor {
+                position: absolute;
+                left: -100%;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                border-right: none;
             }
-            /* إظهار حسب التاب النشط */
-            .app-container.show-sidebar .sidebar { right: 0; }
-            .app-container.show-stream .stream-panel { left: 0; }
-            
-            .mobile-nav { display: flex; }
-            .message { max-width: 90%; }
+
+            /* إظهار حسب القسم المختار بالتحكم السفلي */
+            .app-viewports.open-rooms .control-sidebar {
+                transform: translateX(0);
+                right: 0;
+            }
+
+            .app-viewports.open-stream .live-monitor {
+                transform: translateX(0);
+                left: 0;
+            }
+
+            .console-nav-bar {
+                display: flex;
+            }
+
+            .bubble {
+                max-width: 90%;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- الهيدر العلوي -->
-    <header class="main-header">
-        <h1 id="current-room-title">💬 الدردشة العامة</h1>
-        <div class="security-badge">🛡️ حماية الإمبراطورية: نشطة</div>
+    <!-- رأس الصفحة -->
+    <header class="cyber-header">
+        <div class="cyber-logo">
+            <i class="fa-solid fa-crown"></i>
+            <span id="room-active-title">💬 ساحة الدردشة العامة</span>
+        </div>
+        <div class="status-badge">🛡️ الحماية النشطة</div>
     </header>
 
-    <div class="app-container" id="appContainer">
+    <!-- الهيكل العام للتقسيمات -->
+    <div class="app-viewports" id="viewportLayout">
         
-        <!-- القائمة الجانبية (الأقسام) -->
-        <aside class="sidebar">
-            <div class="sidebar-header">👑 رادارات الأقسام</div>
-            <div class="rooms-list">
-                <button class="room-btn active" onclick="switchRoom('العام', this)">💬 ساحة الدردشة العامة</button>
-                <button class="room-btn" onclick="switchRoom('العاب', this)">🎮 مجمع مجتمع الألعاب</button>
-                <button class="room-btn" onclick="switchRoom('الدعم', this)">🛠️ غرف الدعم والشكاوى</button>
+        <!-- القائمة الجانبية للأقسام -->
+        <aside class="control-sidebar">
+            <div class="sidebar-heading">
+                <i class="fa-solid fa-network-wired"></i> رادارات الغرف المتاحة
+            </div>
+            <div class="rooms-grid">
+                <button class="room-card selected" onclick="updateActiveRoom('العام', this)">
+                    <i class="fa-solid fa-comments"></i> الدردشة العامة للملوك
+                </button>
+                <button class="room-card" onclick="updateActiveRoom('الألعاب', this)">
+                    <i class="fa-solid fa-gamepad"></i> مجتمع ساحات الألعاب
+                </button>
+                <button class="room-card" onclick="updateActiveRoom('الدعم', this)">
+                    <i class="fa-solid fa-circle-exclamation"></i> غرف الشكاوى والطلبات
+                </button>
             </div>
         </aside>
 
-        <!-- منطقة الشات الوسطى المضيئة -->
-        <main class="chat-area">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message" style="border-right: 3px solid var(--neon-pink);">
-                    <div class="msg-meta">
-                        <span class="username" style="color: var(--neon-pink);">نظام الذكاء الاصطناعي</span>
-                        <span class="rank-bot">🤖 بوت الحماية</span>
+        <!-- نافذة الشات الأساسية المستجيبة -->
+        <main class="chat-portal">
+            <div class="chat-stream" id="chatStreamBox">
+                <!-- رسالة ترحيبية ذكية من بوت الأمان -->
+                <div class="bubble" style="border-right: 3px solid var(--neon-purple);">
+                    <div class="bubble-header">
+                        <span class="bubble-author" style="color: var(--neon-purple);">خادم الذكاء الاصطناعي</span>
+                        <span class="rank-system-bot">🤖 بوت الحماية الأمني</span>
                     </div>
-                    <div class="msg-text">مرحباً بك يا إمبراطور حسن! تم تفعيل التصميم السيبراني المتطور بنجاح. أهلاً بجماعتك ومتابعيك.</div>
+                    <div class="bubble-body">
+                        أهلاً بك يا حسن في الشات الأسطوري! تم تفعيل التصميم المطور والسيبراني بنجاح لحماية حسابك وقناتك وتسهيل دردشتك ومتابعتك.
+                    </div>
                 </div>
             </div>
 
-            <!-- صندوق الكتابة السفلي -->
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="messageInput" placeholder="اكتب رسالتك المشفرة هنا يا ملك..." onkeypress="handleKeyPress(event)">
-                <button class="send-btn" onclick="sendMessage()">إرسال</button>
+            <!-- صندوق إدخال النص -->
+            <div class="chat-anchor-bar">
+                <input type="text" class="chat-input-field" id="userMessageIn" placeholder="اكتب رسالتك الآمنة هنا..." onkeypress="detectEnterKey(event)">
+                <button class="trigger-send-btn" onclick="executeMessagePost()">إرسال</button>
             </div>
         </main>
 
-        <!-- منطقة البث المباشر الجانبية -->
-        <section class="stream-panel">
-            <div class="stream-header">🔴 رادار البث الحي الحالي</div>
-            <div class="video-container">
-                <!-- ضع آيدي بث اليوتيوب هنا مكان الـ LIVE_VIDEO_ID_HERE لتشغيل البث داخل الشات -->
+        <!-- نافذة البث المباشر الجانبية -->
+        <section class="live-monitor">
+            <div class="monitor-heading">
+                <i class="fa-solid fa-satellite-dish"></i> البث الحي للألعاب
+            </div>
+            <div class="screen-container">
+                <!-- ضع آيدي بث اليوتيوب هنا مكان الـ LIVE_VIDEO_ID_HERE لتشغيله في الموقع -->
                 <iframe src="https://www.youtube.com/embed/LIVE_VIDEO_ID_HERE" allowfullscreen></iframe>
             </div>
         </section>
 
     </div>
 
-    <!-- بار التنقل السفلي السريع للموبايل (محد مسويه بهالطريقة) -->
-    <nav class="mobile-nav">
-        <button class="nav-tab" id="tabStream" onclick="toggleMobileView('stream')">📺 البث المباشر</button>
-        <button class="nav-tab active" id="tabChat" onclick="toggleMobileView('chat')">💬 الشات</button>
-        <button class="nav-tab" id="tabSidebar" onclick="toggleMobileView('sidebar')">👑 الأقسام</button>
+    <!-- لوحة التبديل السفلية السريعة للموبايل -->
+    <nav class="console-nav-bar">
+        <button class="console-btn" id="btnStreamConsole" onclick="handleConsoleTabToggle('stream')">
+            <i class="fa-solid fa-tv"></i>البث المباشر
+        </button>
+        <button class="console-btn active" id="btnChatConsole" onclick="handleConsoleTabToggle('chat')">
+            <i class="fa-solid fa-message"></i>الدردشة
+        </button>
+        <button class="console-btn" id="btnRoomsConsole" onclick="handleConsoleTabToggle('rooms')">
+            <i class="fa-solid fa-layer-group"></i>الأقسام
+        </button>
     </nav>
 
     <script>
-        const badWords = ["رابط_خبيث", "سب_شتم", "كلمة_ممنوعة"]; 
+        const blockedKeywords = ["رابط_ملغم", "سب_شتم", "رابط_خارجي"];
 
-        function switchRoom(roomName, element) {
-            document.getElementById('current-room-title').innerText = 
-                roomName === 'العام' ? '💬 ساحة الدردشة العامة' : roomName === 'العاب' ? '🎮 مجمع مجتمع الألعاب' : '🛠️ غرف الدعم والشكاوى';
+        function updateActiveRoom(room, btnRef) {
+            document.getElementById('room-active-title').innerText = 
+                room === 'العام' ? '💬 ساحة الدردشة العامة' : room === 'الألعاب' ? '🎮 مجتمع ساحات الألعاب' : '🛠️ غرف الشكاوى والطلبات';
             
-            document.querySelectorAll('.room-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
+            document.querySelectorAll('.room-card').forEach(card => card.classList.remove('selected'));
+            btnRef.classList.add('selected');
             
-            // إذا كان على الموبايل، رجعه لواجهة الشات تلقائياً ورا ما يختار قسم
-            toggleMobileView('chat');
+            // العودة لقسم الشات تلقائياً بالموبايل بعد اختيار الغرفة
+            handleConsoleTabToggle('chat');
         }
 
-        function toggleMobileView(view) {
-            const container = document.getElementById('appContainer');
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        function handleConsoleTabToggle(activeTab) {
+            const layout = document.getElementById('viewportLayout');
+            document.querySelectorAll('.console-btn').forEach(btn => btn.classList.remove('active'));
             
-            container.classList.remove('show-sidebar', 'show-stream');
+            layout.classList.remove('open-rooms', 'open-stream');
             
-            if (view === 'sidebar') {
-                container.classList.add('show-sidebar');
-                document.getElementById('tabSidebar').classList.add('active');
-            } else if (view === 'stream') {
-                container.classList.add('show-stream');
-                document.getElementById('tabStream').classList.add('active');
+            if (activeTab === 'rooms') {
+                layout.classList.add('open-rooms');
+                document.getElementById('btnRoomsConsole').classList.add('active');
+            } else if (activeTab === 'stream') {
+                layout.classList.add('open-stream');
+                document.getElementById('btnStreamConsole').classList.add('active');
             } else {
-                document.getElementById('tabChat').classList.add('active');
+                document.getElementById('btnChatConsole').classList.add('active');
             }
         }
 
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            let text = input.value.trim();
-            if (!text) return;
+        function executeMessagePost() {
+            const field = document.getElementById('userMessageIn');
+            let content = field.value.trim();
+            if (!content) return;
 
-            let hasBadWord = badWords.some(word => text.includes(word));
-            if (hasBadWord) {
-                alert("⚠️ نظام الحماية السيبراني: تم حظر الرسالة فوراً لحفظ أمان الدردشة!");
-                input.value = "";
+            let containsViolation = blockedKeywords.some(keyword => content.includes(keyword));
+            if (containsViolation) {
+                alert("⚠️ نظام الحماية الفوري: تم حظر رسالتك لاحتوائها على محتوى غير مصرح به حفاظاً على الدردشة!");
+                field.value = "";
                 return;
             }
 
-            const messagesContainer = document.getElementById('chatMessages');
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message');
-            msgDiv.style.borderRight = "3px solid var(--neon-gold)"; 
-            msgDiv.style.background = "rgba(255, 215, 0, 0.05)";
+            const stream = document.getElementById('chatStreamBox');
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.classList.add('bubble');
+            bubbleDiv.style.borderRight = "3px solid var(--neon-gold)";
+            bubbleDiv.style.background = "rgba(255, 215, 0, 0.04)";
 
-            msgDiv.innerHTML = `
-                <div class="msg-meta">
-                    <span class="username" style="color: var(--neon-gold); text-shadow: 0 0 5px rgba(255,215,0,0.3);">Hasan</span>
-                    <span class="rank-imperial">👑 رتبة إمبراطورية</span>
+            bubbleDiv.innerHTML = `
+                <div class="bubble-header">
+                    <span class="bubble-author" style="color: var(--neon-gold); text-shadow: 0 0 5px rgba(255,215,0,0.35);">Hasan</span>
+                    <span class="rank-gold">👑 رتبة إمبراطورية</span>
                 </div>
-                <div class="msg-text">${text}</div>
+                <div class="bubble-body">${content}</div>
             `;
 
-            messagesContainer.appendChild(msgDiv);
-            input.value = "";
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            stream.appendChild(bubbleDiv);
+            field.value = "";
+            stream.scrollTop = stream.scrollHeight;
         }
 
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') sendMessage();
+        function detectEnterKey(event) {
+            if (event.key === 'Enter') executeMessagePost();
         }
     </script>
 </body>
 </html>
+
+```
