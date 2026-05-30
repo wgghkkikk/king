@@ -3,261 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شات الإمبراطورية الرسمي</title>
+    <title>لوحة اختبار تصاميم شات الملك</title>
     <style>
         :root {
-            --main-bg: #14151f;
-            --chat-bg: #1c1d2a;
-            --side-bg: rgba(22, 23, 36, 0.95);
+            --bg-color: #12131a;
+            --chat-bg: #1a1b26;
+            --side-bg: #151622;
             --gold: #ffd700;
+            --text-color: #ffffff;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --super-color: #ff00bc;
             --admin-color: #ff3333;
             --mod-color: #00bcff;
-            --super-color: #ff00bc;
             --user-color: #00ff66;
-            --text: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--main-bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body { background-color: #0d0e15; color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* الهيدر والأزرار السحرية */
-        .chat-header {
-            background-color: #0d0e15;
-            padding: 10px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            z-index: 10;
+        /* شريط التبديل العلوي لتجربة التصاميم حياً */
+        .theme-selector-bar {
+            background: linear-gradient(90deg, #1e1f29 0%, #111217 100%);
+            padding: 12px 20px; display: flex; justify-content: center; align-items: center; gap: 15px;
+            border-bottom: 3px solid var(--gold); z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.5); flex-wrap: wrap;
         }
+        .theme-selector-bar span { font-weight: bold; color: var(--gold); font-size: 14px; }
+        .theme-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.3s;
+        }
+        .theme-btn:hover { background: rgba(255,215,0,0.1); border-color: var(--gold); }
+        .theme-btn.active { background: var(--gold); color: #000; border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.4); }
+
+        /* الهيدر المخصص للشات */
+        .chat-header { background-color: #0d0e15; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); z-index: 10; }
         .chat-header h2 { font-size: 16px; color: var(--gold); text-shadow: 0 0 5px rgba(255,215,0,0.3); }
-        
-        .toggle-btn {
-            background: linear-gradient(135deg, var(--gold) 0%, #cc9900 100%);
-            border: none; padding: 8px 14px; border-radius: 8px; color: #000;
-            font-weight: bold; font-size: 12px; cursor: pointer; transition: 0.2s;
-        }
-        .toggle-btn:hover { transform: scale(1.05); }
+        .toggle-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 8px; color: #fff; font-weight: bold; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .toggle-btn:hover { background: var(--gold); color: #000; }
 
-        /* الحاوية الرئيسية */
-        .main-container { flex: 1; display: flex; position: relative; height: calc(100vh - 52px); overflow: hidden; }
+        /* الحاوية الرئيسية للشات */
+        .main-container { flex: 1; display: flex; position: relative; overflow: hidden; background-color: var(--bg-color); }
 
-        /* القائمة اليمنى: الأعضاء والرتب */
-        .right-sidebar {
-            width: 240px; background: var(--side-bg); border-left: 1px solid var(--border);
-            display: flex; flex-direction: column; transition: all 0.3s ease; z-index: 8;
-        }
+        /* القوائم الجانبية السلايد والفتح والغلق بضغطة زر */
+        .sidebar { width: 240px; background: var(--side-bg); display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 8; }
+        .right-sidebar { border-left: 1px solid var(--border-color); }
+        .left-sidebar { border-right: 1px solid var(--border-color); }
         .right-sidebar.hidden { margin-right: -240px; }
-
-        /* القائمة اليسرى: الإضافات */
-        .left-sidebar {
-            width: 240px; background: var(--side-bg); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; transition: all 0.3s ease; z-index: 8;
-        }
         .left-sidebar.hidden { margin-left: -240px; }
 
-        /* عناوين القوائم الجانبية */
-        .sidebar-title {
-            padding: 12px; background: #0d0e15; font-size: 14px; font-weight: bold;
-            text-align: center; border-bottom: 1px solid var(--border); color: var(--gold);
-        }
+        .sidebar-title { padding: 12px; background: rgba(0,0,0,0.2); font-size: 13px; font-weight: bold; text-align: center; border-bottom: 1px solid var(--border-color); color: var(--gold); }
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 12px; }
 
-        /* محتوى القوائم الجانبية */
-        .sidebar-content { flex: 1; overflow-y: auto; padding: 10px; }
-
-        /* تصنيفات الرتب والمستخدمين */
+        /* الرتب وقائمة المتواجدين */
         .rank-category { margin-bottom: 15px; }
-        .category-title { font-size: 12px; color: #888; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        
-        .user-item {
-            display: flex; align-items: center; gap: 8px; padding: 8px;
-            background: rgba(255,255,255,0.02); border-radius: 6px; margin-bottom: 5px; font-size: 13px;
-        }
+        .category-title { font-size: 11px; color: #777; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .user-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.02); border-radius: 6px; margin-bottom: 5px; font-size: 13px; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ff00; box-shadow: 0 0 6px #00ff00; }
         
-        /* ألوان أسماء الرتب مالتك */
         .u-super { color: var(--super-color); font-weight: bold; }
         .u-admin { color: var(--admin-color); font-weight: bold; }
         .u-mod { color: var(--mod-color); font-weight: bold; }
         .u-member { color: var(--user-color); }
 
-        /* أزرار الإضافات بالجهة اليسرى */
-        .addon-btn {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-            color: #fff; text-align: right; font-size: 13px; border-radius: 8px; margin-bottom: 8px;
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
-        }
+        /* أزرار الإضافات للجهة اليسرى */
+        .addon-btn { width: 100%; padding: 10px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: #fff; text-align: right; font-size: 13px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
         .addon-btn:hover { background: rgba(255, 215, 0, 0.1); border-color: var(--gold); color: var(--gold); }
 
-        /* منطقة الوسط: الشات والبث */
+        /* منطقة وسط الشات */
         .center-area { flex: 1; display: flex; flex-direction: column; background-color: var(--chat-bg); position: relative; }
-        
-        /* قسم البث المباشر المدمج فوق الشات */
-        .live-stream-box { background: #0d0e15; border-bottom: 1px solid var(--border); padding: 5px; display: flex; justify-content: center; }
-        .video-wrapper { width: 100%; max-width: 400px; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; }
-        .video-wrapper iframe { width: 100%; height: 100%; border: none; }
-
-        /* صندوق الرسائل */
         .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        
         .message { background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 10px; max-width: 85%; width: fit-content; border-right: 3px solid var(--gold); }
         .msg-meta { font-size: 11px; margin-bottom: 4px; display: flex; gap: 8px; }
-        .msg-text { font-size: 14px; color: #e1e1e8; word-break: break-word; }
+        .msg-text { font-size: 13px; color: #e1e1e8; word-break: break-word; }
 
         /* صندوق الإدخال السفلي */
-        .chat-input-area { padding: 12px; background: #0d0e15; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-        .chat-input { flex: 1; padding: 12px; background: #222332; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        .chat-input-area { padding: 12px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-color); display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
         .chat-input:focus { border-color: var(--gold); }
         .send-btn { padding: 0 20px; background: var(--gold); border: none; border-radius: 8px; color: #000; font-weight: bold; cursor: pointer; }
 
-        /* توافق الشاشات للموبايل */
+        /* [كود التصميم الثاني: ديسكورد / تليجرام] */
+        body.theme-discord {
+            --bg-color: #2f3136; --chat-bg: #36393f; --side-bg: #2f3136;
+            --gold: #5865f2; --border-color: rgba(255,255,255,0.05);
+            --super-color: #ffffff; --admin-color: #f44336; --mod-color: #ff9800; --user-color: #4caf50;
+        }
+        body.theme-discord .theme-selector-bar { border-bottom-color: #5865f2; }
+        body.theme-discord .chat-header h2 { color: #fff; text-shadow: none; }
+        body.theme-discord .send-btn { background: #5865f2; color: #fff; }
+        body.theme-discord .message { border-right: none; border-left: 3px solid #5865f2; background: #40444b; }
+
+        /* [كود التصميم الثالث: الكلاسيكي الخليجي الفاتح] */
+        body.theme-classic-light {
+            --bg-color: #f0f2f5; --chat-bg: #ffffff; --side-bg: #f7f9fa;
+            --gold: #007bff; --text-color: #333333; --border-color: rgba(0,0,0,0.08);
+            --super-color: #d91a1a; --admin-color: #e67e22; --mod-color: #2980b9; --user-color: #27ae60;
+        }
+        body.theme-classic-light { color: #333; }
+        body.theme-classic-light .chat-header { background: #ffffff; }
+        body.theme-classic-light .chat-header h2 { color: #007bff; text-shadow: none; }
+        body.theme-classic-light .sidebar-title { background: #e9ecef; color: #333; }
+        body.theme-classic-light .message { background: #f8f9fa; border-right-color: #007bff; color: #333; }
+        body.theme-classic-light .msg-text { color: #333; }
+        body.theme-classic-light .chat-input { background: #fff; color: #333; border-color: #ccc; }
+        body.theme-classic-light .send-btn { background: #007bff; color: #fff; }
+        body.theme-classic-light .toggle-btn { color: #333; border-color: #ccc; }
+
         @media (max-width: 768px) {
-            .right-sidebar { position: absolute; right: 0; top: 0; bottom: 0; }
-            .left-sidebar { position: absolute; left: 0; top: 0; bottom: 0; }
+            .sidebar { position: absolute; top: 0; bottom: 0; height: 100%; }
+            .right-sidebar { right: 0; } .left-sidebar { left: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- الهيدر والتحكم بالقوائم -->
+    <div class="theme-selector-bar">
+        <span>👑 اختر التصميم المناسب لك لتجربته فوراً:</span>
+        <button class="theme-btn active" onclick="changeTheme('default', this)">🌟 الأسود والذهبي الملكي</button>
+        <button class="theme-btn" onclick="changeTheme('discord', this)">🎮 رمادي ديسكورد / تليجرام الفخم</button>
+        <button class="theme-btn" onclick="changeTheme('classic-light', this)">💎 الكلاسيكي الخليجي الفاتح</button>
+    </div>
+
     <header class="chat-header">
         <button class="toggle-btn" onclick="toggleLeft()">⚙️ الإضافات</button>
-        <h2>👑 شات إمبراطورية الملك 👑</h2>
+        <h2>👑 شات إمبراطورية حسن الملك 👑</h2>
         <button class="toggle-btn" onclick="toggleRight()">👥 المتواجدون</button>
     </header>
 
     <div class="main-container">
-
-        <!-- [الصفحة اليسرة]: الإضافات والتحكم -->
         <aside class="left-sidebar" id="leftSidebar">
-            <div class="sidebar-title">🛠️ لوحة الإضافات</div>
+            <div class="sidebar-title">🛠️ لوحة الإضافات والتحكم</div>
             <div class="sidebar-content">
-                <button class="addon-btn" onclick="alert('قريباً: متجر الرتب والـ Karma')">✨ متجر الرتب الملكية</button>
-                <button class="addon-btn" onclick="alert('قريباً: العاب المسابقات والبوتات')">🎮 قسم ألعاب التسلية</button>
-                <button class="addon-btn" onclick="alert('قريباً: زخرفة الأسماء الاحترافية')">✏️ زخرفة الأسماء والألوان</button>
-                <button class="addon-btn" onclick="alert('قريباً: إرسال الهديا والملصقات')">🎁 نظام الهدايا والميزات</button>
+                <button class="addon-btn">✨ متجر الرتب الملكية</button>
+                <button class="addon-btn">🎮 قسم ألعاب التسلية</button>
+                <button class="addon-btn">✏️ زخرفة الأسماء والألوان</button>
+                <button class="addon-btn">🎁 نظام الهدايا والملصقات</button>
             </div>
         </aside>
 
-        <!-- [الوسط]: ساحة الشات والبث المباشر -->
         <main class="center-area">
-            <!-- رادار البث المباشر المدمج فوق الشات -->
-            <div class="live-stream-box">
-                <div class="video-wrapper">
-                    <!-- غير الـ LIVE_VIDEO_ID_HERE بـ آيدي بثك ليظهر الفيديو داخل الموقع -->
-                    <iframe src="https://www.youtube.com/embed/LIVE_VIDEO_ID_HERE" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <!-- رسائل الدردشة -->
             <div class="chat-messages" id="chatMessages">
-                <div class="message" style="border-right-color: var(--super-color);">
+                <div class="message">
                     <div class="msg-meta">
-                        <span class="u-super">Hasan [السوبر]</span>
-                        <span style="color: #666;">الان</span>
+                        <span class="u-super">Hasan [الملك]</span>
+                        <span>الآن</span>
                     </div>
-                    <div class="msg-text">أهلاً بكم في شات الإمبراطورية الرسمي. القوائم تنفتح وتتغط بضغطة زر من الأزرار الفوق!</div>
+                    <div class="msg-text">مرحباً بك يا إمبراطور! اضغط على الأزرار الملونة الموجودة بأعلى الصفحة لتغيير تصميم وشكل الشات بالكامل فوراً واختيار ما يناسب ذوقك! 🔥</div>
                 </div>
             </div>
 
-            <!-- صندوق الكتابة -->
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="messageInput" placeholder="اكتب رسالتك هنا يا غالي..." onkeypress="handleKeyPress(event)">
                 <button class="send-btn" onclick="sendMessage()">إرسال</button>
             </div>
         </main>
 
-        <!-- [الصفحة اليمنه]: السوبر والأدمن والمشرف والعضو -->
         <aside class="right-sidebar" id="rightSidebar">
             <div class="sidebar-title">👥 المتواجدون حالياً</div>
             <div class="sidebar-content">
-                
-                <!-- قسم السوبر -->
                 <div class="rank-category">
                     <div class="category-title">👑 السوبر (الملك)</div>
-                    <div class="user-item">
-                        <span class="status-dot"></span>
-                        <span class="u-super">Hasan</span>
-                    </div>
+                    <div class="user-item"><span class="status-dot"></span><span class="u-super">Hasan</span></div>
                 </div>
-
-                <!-- قسم الأدمن -->
                 <div class="rank-category">
                     <div class="category-title">🔴 الإدارة (الأدمن)</div>
-                    <div class="user-item">
-                        <span class="status-dot"></span>
-                        <span class="u-admin">Hussam_Admin</span>
-                    </div>
+                    <div class="user-item"><span class="status-dot"></span><span class="u-admin">Hussam_Admin</span></div>
                 </div>
-
-                <!-- قسم المشرفين -->
                 <div class="rank-category">
                     <div class="category-title">🔵 المشرفين</div>
-                    <div class="user-item">
-                        <span class="status-dot"></span>
-                        <span class="u-mod">علاوي_المشرف</span>
-                    </div>
+                    <div class="user-item"><span class="status-dot"></span><span class="u-mod">علاوي_المشرف</span></div>
                 </div>
-
-                <!-- قسم الأعضاء -->
                 <div class="rank-category">
                     <div class="category-title">🟢 الأعضاء</div>
-                    <div class="user-item">
-                        <span class="status-dot"></span>
-                        <span class="u-member">ابن_بغداد</span>
-                    </div>
-                    <div class="user-item">
-                        <span class="status-dot"></span>
-                        <span class="u-member">برنس_الكون</span>
-                    </div>
+                    <div class="user-item"><span class="status-dot"></span><span class="u-member">ابن_بغداد</span></div>
                 </div>
-
             </div>
         </aside>
-
     </div>
 
     <script>
-        // دالة فتح وإغلاق القائمة اليسرى (الإضافات)
-        function toggleLeft() {
-            const left = document.getElementById('leftSidebar');
-            left.classList.toggle('hidden');
-        }
+        function toggleLeft() { document.getElementById('leftSidebar').classList.toggle('hidden'); }
+        function toggleRight() { document.getElementById('rightSidebar').classList.toggle('hidden'); }
 
-        // دالة فتح وإغلاق القائمة اليمنى (الرتب والمتواجدين)
-        function toggleRight() {
-            const right = document.getElementById('rightSidebar');
-            right.classList.toggle('hidden');
+        // دالة التبديل الفوري بين الأكواد والتصاميم
+        function changeTheme(themeName, btnElement) {
+            document.body.className = '';
+            if(themeName !== 'default') { document.body.classList.add('theme-' + themeName); }
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
         }
 
         function sendMessage() {
             const input = document.getElementById('messageInput');
             let text = input.value.trim();
             if (!text) return;
-
             const messagesContainer = document.getElementById('chatMessages');
             const msgDiv = document.createElement('div');
             msgDiv.classList.add('message');
-            msgDiv.style.borderRightColor = "var(--super-color)";
-
-            msgDiv.innerHTML = `
-                <div class="msg-meta">
-                    <span class="u-super">Hasan [السوبر]</span>
-                    <span style="color: #666;">الآن</span>
-                </div>
-                <div class="msg-text">${text}</div>
-            `;
-
+            msgDiv.innerHTML = `<div class="msg-meta"><span class="u-super">Hasan [الملك]</span><span>الآن</span></div><div class="msg-text">${text}</div>`;
             messagesContainer.appendChild(msgDiv);
             input.value = "";
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') sendMessage();
-        }
+        function handleKeyPress(event) { if (event.key === 'Enter') sendMessage(); }
     </script>
 </body>
 </html>
